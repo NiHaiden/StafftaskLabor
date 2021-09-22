@@ -2,6 +2,7 @@ package dev.nhaiden.wdhbsp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import net.bytebuddy.build.ToStringPlugin;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -38,8 +39,9 @@ public class Employee implements Serializable {
     private String lastName;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JsonIgnore
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private List<Task> tasks = new ArrayList<>();
 
 

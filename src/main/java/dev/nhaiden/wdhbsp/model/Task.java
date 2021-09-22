@@ -1,5 +1,6 @@
 package dev.nhaiden.wdhbsp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,17 +29,17 @@ public class Task implements Serializable {
     @EqualsAndHashCode.Exclude
     private String description;
 
-    @Column(name="finished")
+    @Column(name="finished_date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @EqualsAndHashCode.Exclude
-    private LocalDate date;
+    private LocalDate finished;
 
     @Column(name = "hoursWorked")
     @EqualsAndHashCode.Exclude
     private Integer hoursWorked;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable=false)
     @EqualsAndHashCode.Exclude
     private Employee employee;
 }

@@ -2,6 +2,7 @@ package dev.nhaiden.wdhbsp.rest;
 
 import dev.nhaiden.wdhbsp.database.EmployeeRepository;
 import dev.nhaiden.wdhbsp.database.TaskRepository;
+import dev.nhaiden.wdhbsp.exception.ArgumentIsNullException;
 import dev.nhaiden.wdhbsp.exception.EmployeeAlreadyExistsException;
 import dev.nhaiden.wdhbsp.exception.EmployeeNotFoundException;
 import dev.nhaiden.wdhbsp.exception.IdIsNullException;
@@ -9,14 +10,13 @@ import dev.nhaiden.wdhbsp.model.Employee;
 import dev.nhaiden.wdhbsp.model.Task;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +55,7 @@ public class RestController {
 
     @PostMapping("/api/employees")
     public ResponseEntity<Employee> saveEmployee(@Valid @RequestBody Employee employee) {
-        if(Objects.isNull(employee.getId())) {
+        if (Objects.isNull(employee.getId())) {
             throw new IdIsNullException("The Employee ID can't be null!");
         }
 
@@ -72,7 +72,58 @@ public class RestController {
         }
     }
 
+    @GetMapping("/api/employees/{id}/hoursWorked")
+    public Integer getHoursWorked(@PathVariable String id) {
+        if (Objects.isNull(id)) {
+            throw new IdIsNullException("The Employee ID can't be null!");
+        }
+        Integer val = employeeRepository.getHoursWorkedByEmployee(id);
+        if (Objects.isNull(val)) {
+            val = 0;
+        }
 
+        return val;
+    }
+
+    @GetMapping("/api/employees/{id}/tasks")
+    public List<Task> getTasksBetweenDates(@PathVariable String id,
+                                           @RequestParam String from,
+                                           @RequestParam String to) {
+
+        if (Objects.isNull(id)) {
+            throw new IdIsNullException("The Employee ID can't be null!");
+        }
+
+        if (Objects.isNull(from)) {
+            throw new ArgumentIsNullException("The GET \"from\" argument can't be null!");
+        }
+
+        if (Objects.isNull(to)) {
+            throw new ArgumentIsNullException("The GET \"to\" argument can't be null!");
+        }
+
+        LocalDate fromDate;
+        LocalDate toDate;
+
+        Employee emp = employeeRepository.findById(id).orElseThrow(() -> {
+            throw new EmployeeNotFoundException("The Employee with ID " + id + " was not found in the database!");
+        });
+
+        //System.out.println(emp);
+
+        try {
+            fromDate = LocalDate.parse(from);
+            toDate = LocalDate.parse(to);
+
+        } catch (DateTimeParseException ex) {
+            throw ex;
+        }
+
+        //System.out.println(fromDate);
+        //System.out.println(toDate);
+
+        return taskRepository.findTaskByEmployeeAndFinishedBetween(emp, fromDate, toDate);
+    }
 
 
 }
