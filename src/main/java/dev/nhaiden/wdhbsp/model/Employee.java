@@ -34,7 +34,7 @@ public class Employee implements Serializable {
 
     @Column(name = "lastName")
     @NotBlank
-    @Length(max=255)
+    @Length(max = 255)
     @EqualsAndHashCode.Exclude
     private String lastName;
 

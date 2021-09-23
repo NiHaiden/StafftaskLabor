@@ -4,8 +4,6 @@ INSERT INTO staff
 VALUES ('SCMI', 'Barbara', 'Schmidt');
 INSERT INTO staff
 VALUES ('BAUE', 'Fritz', 'Bauer');
-INSERT INTO staff
-VALUES ('HAID', 'Niklas', 'Haiden');
 
 INSERT INTO tasks (description, finished_date, hours_worked, employee_id)
 VALUES ('Implementierung JUnit Tests', '2019-05-17', 120, 'HUBE');

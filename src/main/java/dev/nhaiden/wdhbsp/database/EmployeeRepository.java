@@ -27,9 +27,4 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     public Integer getHoursWorkedByEmployee(
             @Param("employeeID") String employeeID //Named Parameters
     );
-
-
-
-
-
 }

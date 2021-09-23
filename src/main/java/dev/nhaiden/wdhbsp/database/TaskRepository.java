@@ -26,4 +26,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     void delete(Task task);
 
     List<Task> findTaskByEmployeeAndFinishedBetween(Employee employee, LocalDate from, LocalDate to);
+
+
 }

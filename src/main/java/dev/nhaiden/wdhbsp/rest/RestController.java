@@ -37,12 +37,12 @@ public class RestController {
         return employeeRepository.findAll();
     }
 
-    @GetMapping("/api/tasks")
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
+   // @GetMapping("/api/tasks")
+   // public List<Task> getAllTasks() {
+   //     return taskRepository.findAll();
+   // }
 
-    @GetMapping("/api/employee/{id}")
+    @GetMapping("/api/employees/{id}")
     public Employee getUserById(@PathVariable String id) {
         if (Objects.isNull(id)) {
             throw new IdIsNullException("The Employee ID can't be null!");
@@ -77,12 +77,11 @@ public class RestController {
         if (Objects.isNull(id)) {
             throw new IdIsNullException("The Employee ID can't be null!");
         }
-        Integer val = employeeRepository.getHoursWorkedByEmployee(id);
-        if (Objects.isNull(val)) {
-            val = 0;
-        }
 
-        return val;
+        if(employeeRepository.findById(id).isEmpty()) {
+            throw new EmployeeNotFoundException("The Employee with ID " + id + " was not found in the database!");
+        }
+        return employeeRepository.getHoursWorkedByEmployee(id);
     }
 
     @GetMapping("/api/employees/{id}/tasks")
@@ -117,6 +116,10 @@ public class RestController {
 
         } catch (DateTimeParseException ex) {
             throw ex;
+        }
+
+        if (fromDate.isAfter(toDate)) {
+            throw new IllegalArgumentException("The from date can't be higher than the to date!");
         }
 
         //System.out.println(fromDate);

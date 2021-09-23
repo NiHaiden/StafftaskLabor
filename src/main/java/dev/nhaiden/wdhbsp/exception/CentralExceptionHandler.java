@@ -1,7 +1,5 @@
 package dev.nhaiden.wdhbsp.exception;
 
-import net.bytebuddy.asm.Advice;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,7 +20,7 @@ public class CentralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EmployeeAlreadyExistsException.class)
-    public ResponseEntity<String> handleEmployeeAlreadyExistsEx(Exception ex, WebRequest rq){
+    public ResponseEntity<String> handleEmployeeAlreadyExistsEx(Exception ex, WebRequest rq) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
@@ -32,7 +30,12 @@ public class CentralExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ArgumentIsNullException.class)
-    public ResponseEntity<String> handleArgumentIsNullEx(Exception ex, WebRequest rq){
+    public ResponseEntity<String> handleArgumentIsNullEx(Exception ex, WebRequest rq) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentEx(Exception ex, WebRequest rq) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

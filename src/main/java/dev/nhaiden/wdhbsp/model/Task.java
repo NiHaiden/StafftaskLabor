@@ -29,7 +29,7 @@ public class Task implements Serializable {
     @EqualsAndHashCode.Exclude
     private String description;
 
-    @Column(name="finished_date")
+    @Column(name = "finished_date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @EqualsAndHashCode.Exclude
     private LocalDate finished;
@@ -39,7 +39,7 @@ public class Task implements Serializable {
     private Integer hoursWorked;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_id", nullable=false)
+    @JoinColumn(name = "employee_id", nullable = false)
     @EqualsAndHashCode.Exclude
     private Employee employee;
 }
